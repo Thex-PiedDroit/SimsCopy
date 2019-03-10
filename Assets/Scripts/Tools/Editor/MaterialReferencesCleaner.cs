@@ -40,29 +40,12 @@ public class MaterialReferencesCleaner : EditorWindow
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Selected material:", m_selectedMaterial.name);
 			EditorGUILayout.LabelField("Shader:", m_selectedMaterial.shader.name);
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("Properties");
 
 			m_serializedObject.Update();
 
-			EditorGUI.indentLevel++;
-
-			EditorGUILayout.LabelField("Textures");
-			EditorGUI.indentLevel++;
 			ProcessProperties("m_SavedProperties.m_TexEnvs");
-			EditorGUI.indentLevel--;
-
-			EditorGUILayout.LabelField("Floats");
-			EditorGUI.indentLevel++;
 			ProcessProperties("m_SavedProperties.m_Floats");
-			EditorGUI.indentLevel--;
-
-			EditorGUILayout.LabelField("Colors");
-			EditorGUI.indentLevel++;
 			ProcessProperties("m_SavedProperties.m_Colors");
-			EditorGUI.indentLevel--;
-
-			EditorGUI.indentLevel--;
 		}
 
 		EditorGUIUtility.labelWidth = 0;
@@ -73,28 +56,15 @@ public class MaterialReferencesCleaner : EditorWindow
 		var properties = m_serializedObject.FindProperty(path);
 		if (properties != null && properties.isArray)
 		{
-			for (int i = 0; i < properties.arraySize; i++)
+			for (int i = properties.arraySize - 1; i >= 0; --i)
 			{
 				string propName = properties.GetArrayElementAtIndex(i).displayName;
 				bool exist = m_selectedMaterial.HasProperty(propName);
 
-				if (exist)
+				if (!exist)
 				{
-					EditorGUILayout.LabelField(propName, "Exist");
-				}
-				else
-				{
-					using (new EditorGUILayout.HorizontalScope())
-					{
-						EditorGUILayout.LabelField(propName, "Old reference", "CN StatusWarn");
-						if (GUILayout.Button("Remove", GUILayout.Width(80f)))
-						{
-							properties.DeleteArrayElementAtIndex(i);
-							m_serializedObject.ApplyModifiedProperties();
-							GUIUtility.ExitGUI();
-						}
-					}
-
+					properties.DeleteArrayElementAtIndex(i);
+					m_serializedObject.ApplyModifiedProperties();
 				}
 			}
 		}
