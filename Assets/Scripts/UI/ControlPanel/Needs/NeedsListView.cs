@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class NeedsListView : MonoBehaviour
+public class NeedsListView : MonoBehaviour, IEventsListener
 {
 #region Variables (serialized)
-
-	[SerializeField]
-	private EventObject OnControlledCharacterChanged = null;
 
 	[SerializeField]
 	private Transform m_pListContainer = null;
@@ -23,6 +20,8 @@ public class NeedsListView : MonoBehaviour
 
 	private Character m_pCurrentCharacter = null;
 
+	private Enum[] m_pEventsToListenTo = new Enum[] { EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED };
+
 	#endregion
 
 
@@ -30,12 +29,12 @@ public class NeedsListView : MonoBehaviour
 	{
 		InitializeNeedsDisplayItems();
 
-		OnControlledCharacterChanged.OnEventFired += HookToNewCharacterData;
+		EventsHandler.Register(this, m_pEventsToListenTo);
 	}
 
 	private void OnDestroy()
 	{
-		OnControlledCharacterChanged.OnEventFired -= HookToNewCharacterData;
+		EventsHandler.Unregister(this, m_pEventsToListenTo);
 	}
 
 	private void InitializeNeedsDisplayItems()
@@ -91,16 +90,20 @@ public class NeedsListView : MonoBehaviour
 		return m_pCurrentCharacter.GetNeedsUpdater().GetNeed(eAssociatedNeed);
 	}
 
-	private void HookToNewCharacterData(EventData pEventData)
+	public void HandleEvent(Enum eEventType, object pData)
 	{
-		try
+		if (!(eEventType is EGenericGameEvents))
+			return;
+
+		EGenericGameEvents eGameEvent = (EGenericGameEvents)eEventType;
+
+		switch (eGameEvent)
 		{
-			CharacterIdentityEventData pCharacterData = pEventData as CharacterIdentityEventData;
-			m_pCurrentCharacter = pCharacterData.Subject;
-		}
-		catch (NullReferenceException)
-		{
-			DebugTools.LogError("A character changed event has been fired without proper data!");
+			case EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED:
+				{
+					m_pCurrentCharacter = pData as Character;
+					break;
+				}
 		}
 	}
 }

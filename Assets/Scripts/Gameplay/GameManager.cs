@@ -7,9 +7,6 @@ public class GameManager : MonoBehaviour
 #region Variables (serialized)
 
 	[SerializeField]
-	private EventObject OnControlledCharacterChanged = null;
-
-	[SerializeField]
 	private Character m_pTEMP_DefaultCharacter = null;
 
 	#endregion
@@ -32,22 +29,11 @@ public class GameManager : MonoBehaviour
 		SeizeControlOfCharacter(m_pTEMP_DefaultCharacter);
 	}
 
-	private void OnDestroy()
-	{
-		ClearEventObjects();
-	}
-
 	private void SeizeControlOfCharacter(Character pCharacter)
 	{
 		m_pCurrentlyCharacter = pCharacter;
 
-		OnControlledCharacterChanged?.FireEvent(new CharacterIdentityEventData(pCharacter));
-	}
-
-	private void ClearEventObjects()
-	{
-		if (OnControlledCharacterChanged != null)
-			OnControlledCharacterChanged.OnEventFired = null;
+		EventsHandler.Dispatch(EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED, pCharacter);
 	}
 
 	private void FixedUpdate()

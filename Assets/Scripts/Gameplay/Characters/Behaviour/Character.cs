@@ -25,7 +25,7 @@ public class Character : MonoBehaviour
 	{
 		ENeedType eNeedType = m_pNeedsUpdater.GetHighestPriorityNeed();
 
-		Debug.Log(string.Format("Highest priority need = {0}", eNeedType));
+		DebugTools.Log("[Character] - Highest priority need = {0}", eNeedType);
 	}
 
 	public NeedsUpdater GetNeedsUpdater()
