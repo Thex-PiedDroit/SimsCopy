@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d106eea044f1940a0c4bd951c22e21, type: 3}
   m_Name: DefaultNeeds
   m_EditorClassIdentifier: 
-  m_pDataSet:
+  m_dataSet:
     reorderableList:
       canAdd: 1
       canRemove: 1
@@ -38,27 +38,27 @@ MonoBehaviour:
     _keyValues: 010000000000000002000000030000000400000005000000
     _keys: 010000000000000002000000030000000400000005000000
     _values:
-    - m_sDisplayName: Fun
-      m_pSprite: {fileID: 21300000, guid: 806c2995e470ff9418e4174c2a60b4bb, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Fun
+      m_sprite: {fileID: 21300000, guid: 806c2995e470ff9418e4174c2a60b4bb, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}
-    - m_sDisplayName: Social
-      m_pSprite: {fileID: 21300000, guid: d167bd6923c4a7744bdd9cb057c467bc, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Social
+      m_sprite: {fileID: 21300000, guid: d167bd6923c4a7744bdd9cb057c467bc, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}
-    - m_sDisplayName: Energy
-      m_pSprite: {fileID: 21300000, guid: f0a9d2e1e23bf9c4daa3a388b351077c, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Energy
+      m_sprite: {fileID: 21300000, guid: f0a9d2e1e23bf9c4daa3a388b351077c, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}
-    - m_sDisplayName: Hygiene
-      m_pSprite: {fileID: 21300000, guid: e75109386f51e3a4f8d1872fdb19460b, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Hygiene
+      m_sprite: {fileID: 21300000, guid: e75109386f51e3a4f8d1872fdb19460b, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}
-    - m_sDisplayName: Hunger
-      m_pSprite: {fileID: 21300000, guid: 6a9a1efcd0788564b90b7ea487c75b0d, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Hunger
+      m_sprite: {fileID: 21300000, guid: 6a9a1efcd0788564b90b7ea487c75b0d, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}
-    - m_sDisplayName: Bladder
-      m_pSprite: {fileID: 21300000, guid: fc0ee3ed41a234f44bbc70b657b5f6d7, type: 3}
-      m_pStateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
+    - m_displayName: Bladder
+      m_sprite: {fileID: 21300000, guid: fc0ee3ed41a234f44bbc70b657b5f6d7, type: 3}
+      m_stateDisplayData: {fileID: 11400000, guid: bba29604a885a0246a6785a9da2c531a,
         type: 2}

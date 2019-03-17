@@ -127,10 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05e931639fd01de4ba85ca4a160f960a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pDisplayDataSet: {fileID: 11400000, guid: 99b80946c9b5c1f41ad78a94f7203998, type: 2}
-  m_pIcon: {fileID: 6427384644884031474}
-  m_pNameLabel: {fileID: 6427384644995490365}
-  m_pGaugeFill: {fileID: 6427384645269379128}
+  m_displayDataSet: {fileID: 11400000, guid: 99b80946c9b5c1f41ad78a94f7203998, type: 2}
+  m_icon: {fileID: 6427384644884031474}
+  m_nameLabel: {fileID: 6427384644995490365}
+  m_gaugeFill: {fileID: 6427384645269379128}
 --- !u!222 &6427384644642702910
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,19 +1,19 @@
 ﻿
 static public class NeedsToolkit
 {
-	static public float F_NEEDS_MIN_SATISFACTION
+	static public float NEEDS_MIN_SATISFACTION
 	{
 		get { return (float)ENeedState.DEPLETED; }
 	}
 
-	static public float F_NEEDS_MAX_SATISFACTION
+	static public float NEEDS_MAX_SATISFACTION
 	{
 		get { return (float)ENeedState.SATISFIED; }
 	}
 
 
-	static public int GetNeedPriority(ENeedType eNeed)
+	static public int GetNeedPriority(ENeedType need)
 	{
-		return (int)eNeed;
+		return (int)need;
 	}
 }

@@ -4,36 +4,36 @@ using UnityEngine;
 
 static public class DebugTools
 {
-	static public void Log(string sMessage)
+	static public void Log(string message)
 	{
-		Debug.Log(sMessage);
+		Debug.Log(message);
 	}
 
-	static public void Log(string sMessage, params object[] pArgs)
+	static public void Log(string message, params object[] args)
 	{
-		sMessage = string.Format(sMessage, pArgs);
-		Debug.Log(sMessage);
+		message = string.Format(message, args);
+		Debug.Log(message);
 	}
 
-	static public void LogWarning(string sMessage)
+	static public void LogWarning(string message)
 	{
-		Debug.LogWarning(sMessage);
+		Debug.LogWarning(message);
 	}
 
-	static public void LogWarning(string sMessage, params object[] pArgs)
+	static public void LogWarning(string message, params object[] args)
 	{
-		sMessage = string.Format(sMessage, pArgs);
-		Debug.LogWarning(sMessage);
+		message = string.Format(message, args);
+		Debug.LogWarning(message);
 	}
 
-	static public void LogError(string sMessage)
+	static public void LogError(string message)
 	{
-		Debug.LogError(sMessage);
+		Debug.LogError(message);
 	}
 
-	static public void LogError(string sMessage, params object[] pArgs)
+	static public void LogError(string message, params object[] args)
 	{
-		sMessage = string.Format(sMessage, pArgs);
-		Debug.LogError(sMessage);
+		message = string.Format(message, args);
+		Debug.LogError(message);
 	}
 }

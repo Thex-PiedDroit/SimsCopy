@@ -10,16 +10,42 @@ public class DataFixer
 	[MenuItem("Tools/Reserialize all files")]
 	static private void ReserializeAllFiles()
 	{
-		string[] pAllDataObjectsGUIDs = AssetDatabase.FindAssets("", new string[] { "Assets" });
+		string[] allDataObjectsGUIDs = GetAllAssetsGUIDs();
 
-		List<string> pDataObjectsPaths = new List<string>(pAllDataObjectsGUIDs.Length);
-		for (int i = 0; i < pAllDataObjectsGUIDs.Length; ++i)
+		// ForceReserializeAssets takes a list, but we want to treat files one by one to show them in progress bar.
+		List<string> dummyPathsList = new List<string>(1) { "" };
+
+		for (int i = 0, n = allDataObjectsGUIDs.Length; i < n; ++i)
 		{
-			string sPath = AssetDatabase.GUIDToAssetPath(pAllDataObjectsGUIDs[i]);
-			pDataObjectsPaths.Add(sPath);
+			string assetPath = AssetDatabase.GUIDToAssetPath(allDataObjectsGUIDs[i]);
+			ReserializeAsset(assetPath, dummyPathsList);
+
+			float progress = (float)i / n;
+			DisplayProgressBar("Reserializing all files...", assetPath, progress);
 		}
 
-		AssetDatabase.ForceReserializeAssets(pDataObjectsPaths, ForceReserializeAssetsOptions.ReserializeAssetsAndMetadata);
+		ClearProgressBar();
+	}
+
+	static private string[] GetAllAssetsGUIDs()
+	{
+		return AssetDatabase.FindAssets("", new string[] { "Assets" });
+	}
+
+	static private void ReserializeAsset(string assetPath, List<string> dummyPathsList)
+	{
+		dummyPathsList[0] = assetPath;
+		AssetDatabase.ForceReserializeAssets(dummyPathsList, ForceReserializeAssetsOptions.ReserializeAssetsAndMetadata);
+	}
+
+	static private void DisplayProgressBar(string title, string info, float progress)
+	{
+		EditorUtility.DisplayProgressBar(title, info, progress);
+	}
+
+	static private void ClearProgressBar()
+	{
+		EditorUtility.ClearProgressBar();
 	}
 }
 

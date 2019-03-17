@@ -6,35 +6,35 @@ public class Need
 {
 #region Variables (private)
 
-	private readonly ENeedType m_eNeedType = ENeedType.NONE;
+	private readonly ENeedType m_needType = ENeedType.NONE;
 
 	public float Satisfaction { get; private set; } = 0.0f;
 	public ENeedState State { get; private set; } = ENeedState.SATISFIED;
 
-	private NeedStateInfo m_tStateInfo = new NeedStateInfo();
+	private NeedStateInfo m_stateInfo = new NeedStateInfo();
 
 	#endregion
 
 
-	public Need(ENeedType eNeedType)
+	public Need(ENeedType needType)
 	{
-		m_eNeedType = eNeedType;
+		m_needType = needType;
 		Satisfaction = (float)ENeedState.SATISFIED;
 	}
 
 	public NeedStateInfo GetStateInfo()
 	{
-		m_tStateInfo.m_fSatisfaction = Satisfaction;
-		m_tStateInfo.m_eState = State;
+		m_stateInfo.m_satisfaction = Satisfaction;
+		m_stateInfo.m_state = State;
 
-		return m_tStateInfo;
+		return m_stateInfo;
 	}
 
-	public void Decay(float fLoss)
+	public void Decay(float loss)
 	{
 		int iPreviousValue = (int)Satisfaction;
 
-		Satisfaction -= fLoss;
+		Satisfaction -= loss;
 
 		if (iPreviousValue != (int)Satisfaction)
 			ComputeNewState();
@@ -43,11 +43,11 @@ public class Need
 			ClampToMin();
 	}
 
-	public void Replenish(float fGain)
+	public void Replenish(float gain)
 	{
 		int iPreviousValue = (int)Satisfaction;
 
-		Satisfaction += fGain;
+		Satisfaction += gain;
 
 		if (iPreviousValue != (int)Satisfaction)
 			ComputeNewState();
@@ -58,39 +58,39 @@ public class Need
 
 	private void ComputeNewState()
 	{
-		ENeedState eNeedState = ENeedState.SATISFIED;
+		ENeedState needState = ENeedState.SATISFIED;
 
 		if (IsValueInState(ENeedState.DEPLETED))
-			eNeedState = ENeedState.DEPLETED;
+			needState = ENeedState.DEPLETED;
 
 		else if (IsValueInState(ENeedState.CRITICAL))
-			eNeedState = ENeedState.CRITICAL;
+			needState = ENeedState.CRITICAL;
 
 		else if (IsValueInState(ENeedState.LOW))
-			eNeedState = ENeedState.LOW;
+			needState = ENeedState.LOW;
 
 
-		State = eNeedState;
+		State = needState;
 	}
 
-	private bool IsValueInState(ENeedState eNeedState)
+	private bool IsValueInState(ENeedState needState)
 	{
-		return Satisfaction <= (float)eNeedState;
+		return Satisfaction <= (float)needState;
 	}
 
 	private void ClampToMin()
 	{
-		Satisfaction = Mathf.Max(NeedsToolkit.F_NEEDS_MIN_SATISFACTION, Satisfaction);
+		Satisfaction = Mathf.Max(NeedsToolkit.NEEDS_MIN_SATISFACTION, Satisfaction);
 	}
 
 	private void ClampToMax()
 	{
-		Satisfaction = Mathf.Min(Satisfaction, NeedsToolkit.F_NEEDS_MAX_SATISFACTION);
+		Satisfaction = Mathf.Min(Satisfaction, NeedsToolkit.NEEDS_MAX_SATISFACTION);
 	}
 }
 
 public struct NeedStateInfo
 {
-	public float m_fSatisfaction;
-	public ENeedState m_eState;
+	public float m_satisfaction;
+	public ENeedState m_state;
 }

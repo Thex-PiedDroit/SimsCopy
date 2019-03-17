@@ -5,8 +5,8 @@ public class CharacterIdentityEventData : EventData
 	public Character Subject { get; } = null;
 
 
-	public CharacterIdentityEventData(Character pCharacter)
+	public CharacterIdentityEventData(Character character)
 	{
-		Subject = pCharacter;
+		Subject = character;
 	}
 }

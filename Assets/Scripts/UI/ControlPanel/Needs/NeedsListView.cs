@@ -9,18 +9,18 @@ public class NeedsListView : MonoBehaviour, IEventsListener
 #region Variables (serialized)
 
 	[SerializeField]
-	private Transform m_pListContainer = null;
+	private Transform m_listContainer = null;
 
 	[SerializeField]
-	private List<NeedDisplayItem> m_pNeedsDisplayItems = null;
+	private List<NeedDisplayItem> m_needsDisplayItems = null;
 
 	#endregion
 
 #region Variables (private)
 
-	private Character m_pCurrentCharacter = null;
+	static private readonly Enum[] EVENTS_TO_LISTEN_TO = new Enum[] { EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED };
 
-	private Enum[] m_pEventsToListenTo = new Enum[] { EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED };
+	private Character m_currentCharacter = null;
 
 	#endregion
 
@@ -29,39 +29,36 @@ public class NeedsListView : MonoBehaviour, IEventsListener
 	{
 		InitializeNeedsDisplayItems();
 
-		EventsHandler.Register(this, m_pEventsToListenTo);
+		EventsHandler.Register(this, EVENTS_TO_LISTEN_TO);
 	}
 
 	private void OnDestroy()
 	{
-		EventsHandler.Unregister(this, m_pEventsToListenTo);
+		EventsHandler.Unregister(this, EVENTS_TO_LISTEN_TO);
 	}
 
 	private void InitializeNeedsDisplayItems()
 	{
-		ENeedType[] pAllNeeds = Toolkit.GetEnumValues<ENeedType>();
+		ENeedType[] allNeeds = Toolkit.GetEnumValues<ENeedType>();
 
-		for (int i = 0; i < pAllNeeds.Length; ++i)
+		for (int i = 0; i < allNeeds.Length; ++i)
 		{
-			if (pAllNeeds[i] == ENeedType.NONE)
+			ENeedType needType = allNeeds[i];
+
+			if (needType == ENeedType.NONE)
 				continue;
 
-			if (m_pNeedsDisplayItems.Count <= i)
+			if (m_needsDisplayItems.Count <= i)
 				CreateNewNeedDisplayItem();
 
-			InitializeNeedDisplayItem(m_pNeedsDisplayItems[i], pAllNeeds[i]);
+			m_needsDisplayItems[i].InitializeWithNeedType(needType);
 		}
 	}
 
 	private void CreateNewNeedDisplayItem()
 	{
-		NeedDisplayItem pNewItem = Instantiate(m_pNeedsDisplayItems[0], m_pListContainer);
-		m_pNeedsDisplayItems.Add(pNewItem);
-	}
-
-	private void InitializeNeedDisplayItem(NeedDisplayItem pItem, ENeedType eNeedType)
-	{
-		pItem.InitializeWithNeedType(eNeedType);
+		NeedDisplayItem newItem = Instantiate(m_needsDisplayItems[0], m_listContainer);
+		m_needsDisplayItems.Add(newItem);
 	}
 
 	private void Update()
@@ -71,37 +68,37 @@ public class NeedsListView : MonoBehaviour, IEventsListener
 
 	private void UpdateNeedsDisplay()
 	{
-		if (m_pCurrentCharacter == null)
+		if (m_currentCharacter == null)
 			return;
 
-		for (int i = 0; i < m_pNeedsDisplayItems.Count; ++i)
+		for (int i = 0; i < m_needsDisplayItems.Count; ++i)
 		{
-			NeedDisplayItem pCurrentItem = m_pNeedsDisplayItems[i];
+			NeedDisplayItem currentItem = m_needsDisplayItems[i];
 
-			NeedStateInfo pNeedStateInfo = GetNeedStateInfoFromDisplayItem(pCurrentItem);
-			pCurrentItem.UpdateGauge(pNeedStateInfo);
+			NeedStateInfo needStateInfo = GetNeedStateInfoFromDisplayItem(currentItem);
+			currentItem.UpdateGauge(needStateInfo);
 		}
 	}
 
-	private NeedStateInfo GetNeedStateInfoFromDisplayItem(NeedDisplayItem pItem)
+	private NeedStateInfo GetNeedStateInfoFromDisplayItem(NeedDisplayItem item)
 	{
-		ENeedType eAssociatedNeed = pItem.GetAssociatedNeed();
+		ENeedType associatedNeed = item.GetAssociatedNeed();
 
-		return m_pCurrentCharacter.GetNeedsUpdater().GetNeedStateInfo(eAssociatedNeed);
+		return m_currentCharacter.GetNeedsUpdater().GetNeedStateInfo(associatedNeed);
 	}
 
-	public void HandleEvent(Enum eEventType, object pData)
+	public void HandleEvent(Enum eventType, object data)
 	{
-		if (!(eEventType is EGenericGameEvents))
+		if (!(eventType is EGenericGameEvents))
 			return;
 
-		EGenericGameEvents eGameEvent = (EGenericGameEvents)eEventType;
+		EGenericGameEvents gameEvent = (EGenericGameEvents)eventType;
 
-		switch (eGameEvent)
+		switch (gameEvent)
 		{
 			case EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED:
 				{
-					m_pCurrentCharacter = pData as Character;
+					m_currentCharacter = data as Character;
 					break;
 				}
 		}

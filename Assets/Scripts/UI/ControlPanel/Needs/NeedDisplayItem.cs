@@ -9,14 +9,14 @@ public class NeedDisplayItem : MonoBehaviour
 #region Variables (serialized)
 
 	[SerializeField]
-	private NeedTypesDisplayDataSet m_pDisplayDataSet = null;
+	private NeedTypesDisplayDataSet m_displayDataSet = null;
 
 	[SerializeField]
-	private Image m_pIcon = null;
+	private Image m_icon = null;
 	[SerializeField]
-	private TextMeshProUGUI m_pNameLabel = null;
+	private TextMeshProUGUI m_nameLabel = null;
 	[SerializeField]
-	private Image m_pGaugeFill = null;
+	private Image m_gaugeFill = null;
 
 	#endregion
 
@@ -25,67 +25,67 @@ public class NeedDisplayItem : MonoBehaviour
 	const float MIN_GAUGE_SCALE = 0.05f;
 
 
-	private ENeedType m_eAssociatedNeed = ENeedType.NONE;
+	private ENeedType m_associatedNeed = ENeedType.NONE;
 
-	private NeedTypesDisplayData m_pNeedTypeDisplayData;
-	private NeedStateDisplayDataSet m_pNeedStateDisplayData;
+	private NeedTypesDisplayData m_needTypeDisplayData;
+	private NeedStateDisplayDataSet m_needStateDisplayData;
 
 	#endregion
 
 
-	public void InitializeWithNeedType(ENeedType eNeedType)
+	public void InitializeWithNeedType(ENeedType needType)
 	{
-		m_eAssociatedNeed = eNeedType;
-		FetchDataForNeedType(eNeedType);
+		m_associatedNeed = needType;
+		FetchDataForNeedType(needType);
 
 		InitIcon();
 		InitName();
 	}
 
-	private void FetchDataForNeedType(ENeedType eNeedType)
+	private void FetchDataForNeedType(ENeedType needType)
 	{
-		m_pNeedTypeDisplayData = m_pDisplayDataSet.GetDataForNeed(eNeedType);
-		m_pNeedStateDisplayData = m_pNeedTypeDisplayData.m_pStateDisplayData;
+		m_needTypeDisplayData = m_displayDataSet.GetDataForNeed(needType);
+		m_needStateDisplayData = m_needTypeDisplayData.m_stateDisplayData;
 	}
 
 	private void InitIcon()
 	{
-		m_pIcon.sprite = m_pNeedTypeDisplayData.m_pSprite;
+		m_icon.sprite = m_needTypeDisplayData.m_sprite;
 	}
 
 	private void InitName()
 	{
-		m_pNameLabel.text = m_pNeedTypeDisplayData.m_sDisplayName;
+		m_nameLabel.text = m_needTypeDisplayData.m_displayName;
 	}
 
-	public void UpdateGauge(NeedStateInfo pNeed)
+	public void UpdateGauge(NeedStateInfo needStateInfo)
 	{
-		UpdateGaugeFilling(pNeed.m_fSatisfaction);
-		UpdateGaugeColor(pNeed.m_eState);
+		UpdateGaugeFilling(needStateInfo.m_satisfaction);
+		UpdateGaugeColor(needStateInfo.m_state);
 	}
 
-	private void UpdateGaugeFilling(float fSatisfaction)
+	private void UpdateGaugeFilling(float satisfaction)
 	{
-		float fFillingPercent = fSatisfaction / NeedsToolkit.F_NEEDS_MAX_SATISFACTION;
-		fFillingPercent = Mathf.Max(MIN_GAUGE_SCALE, fFillingPercent);
+		float fillingPercent = satisfaction / NeedsToolkit.NEEDS_MAX_SATISFACTION;
+		fillingPercent = Mathf.Max(MIN_GAUGE_SCALE, fillingPercent);
 
-		SetGaugeScale(fFillingPercent);
+		SetGaugeScale(fillingPercent);
 	}
 
-	private void SetGaugeScale(float fScale)
+	private void SetGaugeScale(float newScale)
 	{
-		Vector3 tScale = m_pGaugeFill.transform.localScale;
-		tScale.x = fScale;
-		m_pGaugeFill.transform.localScale = tScale;
+		Vector3 scale = m_gaugeFill.transform.localScale;
+		scale.x = newScale;
+		m_gaugeFill.transform.localScale = scale;
 	}
 
-	private void UpdateGaugeColor(ENeedState eNeedState)
+	private void UpdateGaugeColor(ENeedState needState)
 	{
-		m_pGaugeFill.color = m_pNeedStateDisplayData.GetColorForState(eNeedState);
+		m_gaugeFill.color = m_needStateDisplayData.GetColorForState(needState);
 	}
 
 	public ENeedType GetAssociatedNeed()
 	{
-		return m_eAssociatedNeed;
+		return m_associatedNeed;
 	}
 }

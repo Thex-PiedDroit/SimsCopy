@@ -7,24 +7,23 @@ public class EventsHandler
 {
 #region Singleton
 
-	static private EventsHandler s_pInstance = null;
-
+	static private EventsHandler m_instance = null;
 	static private EventsHandler Instance
 	{
 		get
 		{
-			if (s_pInstance == null)
-				s_pInstance = new EventsHandler();
+			if (m_instance == null)
+				m_instance = new EventsHandler();
 
-			return s_pInstance;
+			return m_instance;
 		}
 	}
 
 	private EventsHandler()
 	{
-		m_pListeners = new Dictionary<int, List<IEventsListener>>();
-		m_pEvents = new List<Enum>();
-		m_pQueuedEventTriggers = new Queue<QueuedEvent>();
+		m_listeners = new Dictionary<int, List<IEventsListener>>();
+		m_events = new List<Enum>();
+		m_queuedEventTriggers = new Queue<QueuedEvent>();
 	}
 
 	#endregion
@@ -33,126 +32,126 @@ public class EventsHandler
 
 	private struct QueuedEvent
 	{
-		public Enum m_eEventType;
-		public object m_pData;
+		public Enum m_eventType;
+		public object m_data;
 
 
-		public QueuedEvent(Enum eEventType, object pData)
+		public QueuedEvent(Enum eventType, object data)
 		{
-			m_eEventType = eEventType;
-			m_pData = pData;
+			m_eventType = eventType;
+			m_data = data;
 		}
 	}
 
 
-	private Dictionary<int /*iEventID*/, List<IEventsListener>> m_pListeners = null;
-	private List<Enum> m_pEvents = null;
+	private Dictionary<int /*iEventID*/, List<IEventsListener>> m_listeners = null;
+	private List<Enum> m_events = null;
 
-	private Queue<QueuedEvent> m_pQueuedEventTriggers = null;
+	private Queue<QueuedEvent> m_queuedEventTriggers = null;
 
-	private bool m_bFiringEvent = false;
+	private bool m_isFiringEvent = false;
 
 	#endregion
 
 
-	static public void Dispatch(Enum eEvent, object pData = null)
+	static public void Dispatch(Enum eventType, object data = null)
 	{
-		if (Instance.m_bFiringEvent)
+		if (Instance.m_isFiringEvent)
 		{
-			Instance.EnqueueEvent(eEvent, pData);
+			Instance.EnqueueEvent(eventType, data);
 			return;
 		}
 
-		Instance.Dispatch_Internal(eEvent, pData);
+		Instance.Dispatch_Internal(eventType, data);
 	}
 
-	private void EnqueueEvent(Enum eEvent, object pData)
+	private void EnqueueEvent(Enum eventType, object data)
 	{
-		m_pQueuedEventTriggers.Enqueue(new QueuedEvent(eEvent, pData));
+		m_queuedEventTriggers.Enqueue(new QueuedEvent(eventType, data));
 	}
 
-	private void Dispatch_Internal(Enum eEvent, object pData)
+	private void Dispatch_Internal(Enum eventType, object data)
 	{
-		List<IEventsListener> pListeners = m_pListeners[eEvent.GetHashCode()];
+		List<IEventsListener> listeners = m_listeners[eventType.GetHashCode()];
 
-		if (pListeners == null)
+		if (listeners == null)
 			return;
 
-		for (int i = 0, n = pListeners.Count; i < n; ++i)
+		for (int i = 0, n = listeners.Count; i < n; ++i)
 		{
-			Assert.IsNotNull(pListeners[i], string.Format("Someone is still listening to event \"{0}\" but is now null. Please make sure to unregister OnDestroy.", eEvent.ToString()));
+			Assert.IsNotNull(listeners[i], string.Format("Someone is still listening to event \"{0}\" but is now null. Please make sure to unregister OnDestroy.", eventType.ToString()));
 
-			pListeners[i].HandleEvent(eEvent, pData);
+			listeners[i].HandleEvent(eventType, data);
 		}
 
-		if (m_pQueuedEventTriggers.Count > 0)
+		if (m_queuedEventTriggers.Count > 0)
 			DispatchNextQueuedEvent();
 	}
 
 	private void DispatchNextQueuedEvent()
 	{
-		QueuedEvent tEvent = m_pQueuedEventTriggers.Dequeue();
-		Dispatch_Internal(tEvent.m_eEventType, tEvent.m_pData);
+		QueuedEvent nextEvent = m_queuedEventTriggers.Dequeue();
+		Dispatch_Internal(nextEvent.m_eventType, nextEvent.m_data);
 	}
 
-	static public void Register(IEventsListener pListener, Enum[] pEvents)
+	static public void Register(IEventsListener listener, Enum[] events)
 	{
-		if (pListener != null)
-			Instance.Register_Internal(pListener, pEvents);
+		if (listener != null)
+			Instance.Register_Internal(listener, events);
 	}
 
-	private void Register_Internal(IEventsListener pListener, Enum[] pEvents)
+	private void Register_Internal(IEventsListener listener, Enum[] events)
 	{
-		for (int i = 0; i < pEvents.Length; ++i)
+		for (int i = 0; i < events.Length; ++i)
 		{
-			Enum eEventType = pEvents[i];
+			Enum eventType = events[i];
 
-			int iEventID = GetEventID(eEventType);
+			int eventID = GetEventID(eventType);
 
-			if (!m_pListeners.ContainsKey(iEventID))
+			if (!m_listeners.ContainsKey(eventID))
 			{
-				m_pEvents.Add(eEventType);
-				m_pListeners[iEventID] = new List<IEventsListener>();
+				m_events.Add(eventType);
+				m_listeners[eventID] = new List<IEventsListener>();
 			}
-			else if (m_pListeners[iEventID].Contains(pListener))
+			else if (m_listeners[eventID].Contains(listener))
 			{
 				continue;
 			}
 
-			m_pListeners[iEventID].Add(pListener);
+			m_listeners[eventID].Add(listener);
 		}
 	}
 
-	static public void Unregister(IEventsListener pListener, params Enum[] pEvents)
+	static public void Unregister(IEventsListener listener, params Enum[] events)
 	{
-		if (pListener != null)
-			Instance.Unregister_Internal(pListener, pEvents);
+		if (listener != null)
+			Instance.Unregister_Internal(listener, events);
 	}
 
-	private void Unregister_Internal(IEventsListener pListener, Enum[] pEvents)
+	private void Unregister_Internal(IEventsListener listener, Enum[] events)
 	{
-		for (int i = 0; i < pEvents.Length; ++i)
+		for (int i = 0; i < events.Length; ++i)
 		{
-			Enum eEventType = pEvents[i];
+			Enum eventType = events[i];
 
-			int iEventID = GetEventID(eEventType);
+			int eventID = GetEventID(eventType);
 
-			int iListenerPlaceInList = m_pListeners[iEventID].Find(pListener);
+			int listenerPlaceInList = m_listeners[eventID].Find(listener);
 
-			if (iListenerPlaceInList != -1)
+			if (listenerPlaceInList != -1)
 			{
-				m_pListeners[iEventID].RemoveSwapLast(iListenerPlaceInList);
+				m_listeners[eventID].RemoveSwapLast(listenerPlaceInList);
 			}
 		}
 	}
 
-	static private int GetEventID(Enum eEventType)
+	static private int GetEventID(Enum eventType)
 	{
-		return eEventType.GetHashCode();
+		return eventType.GetHashCode();
 	}
 }
 
 public interface IEventsListener
 {
-	void HandleEvent(Enum eEventType, object pData);
+	void HandleEvent(Enum eventType, object data);
 }

@@ -6,160 +6,162 @@ using System.Collections.Generic;
 static public class Vec2Extensions
 {
 #pragma warning disable IDE1006 // Naming Styles
-	static public Vector3 xyz(this Vector2 tVec)
+	static public Vector3 xyz(this Vector2 vec)
 	{
-		return tVec;	// Yep...
+		return vec;	// Yep...
 	}
 
-	static public Vector3 xzy(this Vector2 tVec)
+	static public Vector3 xzy(this Vector2 vec)
 	{
-		return new Vector3(tVec.x, 0.0f, tVec.y);
+		return new Vector3(vec.x, 0.0f, vec.y);
 	}
 
-	static public Vector2 x_(this Vector2 tVec)
+	static public Vector2 x_(this Vector2 vec)
 	{
-		return new Vector2(tVec.x, 0.0f);
+		return new Vector2(vec.x, 0.0f);
 	}
 
-	static public Vector2 _y(this Vector2 tVec)
+	static public Vector2 _y(this Vector2 vec)
 	{
-		return new Vector2(0.0f, tVec.y);
+		return new Vector2(0.0f, vec.y);
 	}
 
-	static public Vector2 ShiftX(this Vector2 tVec, float fOffsetX)
+	static public Vector2 ShiftX(this Vector2 vec, float offsetX)
 	{
-		tVec.x += fOffsetX;
-		return tVec;
+		vec.x += offsetX;
+		return vec;
 	}
 
-	static public Vector2 ShiftY(this Vector2 tVec, float fOffsetY)
+	static public Vector2 ShiftY(this Vector2 vec, float offsetY)
 	{
-		tVec.x += fOffsetY;
-		return tVec;
+		vec.x += offsetY;
+		return vec;
 	}
 
-	static public Vector2 ShiftXY(this Vector2 tVec, Vector2 tOffset)
+	static public Vector2 ShiftXY(this Vector2 vec, Vector2 offset)
 	{
-		tVec += tOffset;
-		return tVec;
+		vec += offset;
+		return vec;
 	}
 
-	static public Vector2 SetX(this Vector2 tVec, float fX)
+	static public Vector2 SetX(this Vector2 vec, float x)
 	{
-		tVec.x = fX;
-		return tVec;
+		vec.x = x;
+		return vec;
 	}
 
-	static public Vector2 SetY(this Vector2 tVec, float fY)
+	static public Vector2 SetY(this Vector2 vec, float y)
 	{
-		tVec.y = fY;
-		return tVec;
+		vec.y = y;
+		return vec;
 	}
 
-	static public Vector2 Clamp(this Vector2 tVec, Vector2 tMin, Vector2 tMax)
+	static public Vector2 Clamp(this Vector2 vec, Vector2 min, Vector2 max)
 	{
-		tVec.x = Mathf.Clamp(tVec.x, tMin.x, tMax.x);
-		tVec.y = Mathf.Clamp(tVec.y, tMin.y, tMax.y);
-		return tVec;
+		vec.x = Mathf.Clamp(vec.x, min.x, max.x);
+		vec.y = Mathf.Clamp(vec.y, min.y, max.y);
+
+		return vec;
 	}
 }
 
 static public class Vec3Extensions
 {
-	static public Vector2 xy(this Vector3 tVec)
+	static public Vector2 xy(this Vector3 vec)
 	{
-		return tVec;
+		return vec;
 	}
 
-	static public Vector3 xzy(this Vector3 tVec)
+	static public Vector3 xzy(this Vector3 vec)
 	{
-		return new Vector3(tVec.x, tVec.z, tVec.y);
+		return new Vector3(vec.x, vec.z, vec.y);
 	}
 
-	static public Vector3 xyz(this Vector3 tVec)
+	static public Vector3 xyz(this Vector3 vec)
 	{
-		return new Vector3(tVec.x, tVec.y, tVec.z);
+		return new Vector3(vec.x, vec.y, vec.z);
 	}
 
-	static public Vector3 x_z(this Vector3 tVec)
+	static public Vector3 x_z(this Vector3 vec)
 	{
-		return new Vector3(tVec.x, 0.0f, tVec.z);
+		return new Vector3(vec.x, 0.0f, vec.z);
 	}
 
-	static public Vector3 xy_(this Vector3 tVec)
+	static public Vector3 xy_(this Vector3 vec)
 	{
-		return new Vector3(tVec.x, tVec.y);
+		return new Vector3(vec.x, vec.y);
 	}
 
-	static public Vector3 _yz(this Vector3 tVec)
+	static public Vector3 _yz(this Vector3 vec)
 	{
-		return new Vector3(0.0f, tVec.y, tVec.z);
+		return new Vector3(0.0f, vec.y, vec.z);
 	}
 #pragma warning restore IDE1006 // Naming Styles
 
-	static public Vector3 ShiftX(this Vector3 tVec, float fOffsetX)
+	static public Vector3 ShiftX(this Vector3 vec, float offsetX)
 	{
-		tVec.x += fOffsetX;
-		return tVec;
+		vec.x += offsetX;
+		return vec;
 	}
 
-	static public Vector3 ShiftY(this Vector3 tVec, float fOffsetY)
+	static public Vector3 ShiftY(this Vector3 vec, float offsetY)
 	{
-		tVec.x += fOffsetY;
-		return tVec;
+		vec.x += offsetY;
+		return vec;
 	}
 
-	static public Vector3 ShiftZ(this Vector3 tVec, float fOffsetZ)
+	static public Vector3 ShiftZ(this Vector3 vec, float offsetZ)
 	{
-		tVec.x += fOffsetZ;
-		return tVec;
+		vec.x += offsetZ;
+		return vec;
 	}
 
-	static public Vector3 ShiftXYZ(this Vector3 tVec, Vector3 tOffset)
+	static public Vector3 ShiftXYZ(this Vector3 vec, Vector3 offset)
 	{
-		tVec += tOffset;
-		return tVec;
+		vec += offset;
+		return vec;
 	}
 
-	static public Vector3 SetX(this Vector3 tVec, float fX)
+	static public Vector3 SetX(this Vector3 vec, float x)
 	{
-		tVec.x = fX;
-		return tVec;
+		vec.x = x;
+		return vec;
 	}
 
-	static public Vector3 SetY(this Vector3 tVec, float fY)
+	static public Vector3 SetY(this Vector3 vec, float y)
 	{
-		tVec.y = fY;
-		return tVec;
+		vec.y = y;
+		return vec;
 	}
 
-	static public Vector3 SetZ(this Vector3 tVec, float fZ)
+	static public Vector3 SetZ(this Vector3 vec, float z)
 	{
-		tVec.z = fZ;
-		return tVec;
+		vec.z = z;
+		return vec;
 	}
 
-	static public Vector3 Clamp(this Vector3 tVec, Vector3 tMin, Vector3 tMax)
+	static public Vector3 Clamp(this Vector3 vec, Vector3 min, Vector3 max)
 	{
-		tVec.x = Mathf.Clamp(tVec.x, tMin.x, tMax.x);
-		tVec.y = Mathf.Clamp(tVec.y, tMin.y, tMax.y);
-		tVec.z = Mathf.Clamp(tVec.z, tMin.z, tMax.z);
-		return tVec;
+		vec.x = Mathf.Clamp(vec.x, min.x, max.x);
+		vec.y = Mathf.Clamp(vec.y, min.y, max.y);
+		vec.z = Mathf.Clamp(vec.z, min.z, max.z);
+
+		return vec;
 	}
 }
 
 static public class ArraysExtensions
 {
-	static public T Last<T>(this T[] pArray)
+	static public T Last<T>(this T[] array)
 	{
-		return pArray[pArray.Length - 1];
+		return array[array.Length - 1];
 	}
 
-	static public bool Contains<T>(this T[] pArray, T pElement)
+	static public bool Contains<T>(this T[] array, T element)
 	{
-		for (int i = 0, n = pArray.Length; i < n; ++i)
+		for (int i = 0, n = array.Length; i < n; ++i)
 		{
-			if (pArray[i].Equals(pElement))
+			if (array[i].Equals(element))
 				return true;
 		}
 
@@ -169,89 +171,104 @@ static public class ArraysExtensions
 
 static public class ListsExtensions
 {
-	static public List<T> Clone<T>(this List<T> pList)
+	static public List<T> Clone<T>(this List<T> list)
 	{
-		List<T> tNewList = new List<T>(pList.Count);
-		for (int i = 0; i < pList.Count; ++i)
-			tNewList.Add(pList[i]);
+		List<T> newList = new List<T>(list.Count);
 
-		return tNewList;
+		for (int i = 0; i < list.Count; ++i)
+		{
+			newList.Add(list[i]);
+		}
+
+		return newList;
 	}
 
 	/// <summary>
 	/// Returns -1 if not found.
 	/// </summary>
-	static public int Find<T>(this List<T> pList, T pElement)
+	static public int Find<T>(this List<T> list, T element)
 	{
-		for (int i = 0, n = pList.Count; i < n; ++i)
+		for (int i = 0, n = list.Count; i < n; ++i)
 		{
-			if (pList[i].Equals(pElement))
+			if (list[i].Equals(element))
 				return i;
 		}
 
 		return -1;
 	}
 
-	static public T GetRandomElement<T>(this List<T> pList)
+	static public T GetRandomElement<T>(this List<T> list)
 	{
-		return pList[UnityEngine.Random.Range(0, pList.Count)];
+		return list[UnityEngine.Random.Range(0, list.Count)];
 	}
 
-	static public void RemoveSwapLast<T>(this List<T> pList, int iIndex)
+	static public void RemoveSwapLast<T>(this List<T> list, int index)
 	{
-		int iLastItemIndex = pList.Count - 1;
+		int lastItemIndex = list.Count - 1;
 
-		pList[iIndex] = pList[iLastItemIndex];
-		pList.RemoveAt(iLastItemIndex);
+		list[index] = list[lastItemIndex];
+		list.RemoveAt(lastItemIndex);
 	}
 }
 
 static public class DictionariesExtensions
 {
-	static public Dictionary<T, U> Clone<T, U>(this Dictionary<T, U> pDictionary)
+	static public Dictionary<T, U> Clone<T, U>(this Dictionary<T, U> dictionary)
 	{
-		Dictionary<T, U> tNewDictionary = new Dictionary<T, U>(pDictionary.Count);
-		foreach (KeyValuePair<T, U> pPair in pDictionary)
-			tNewDictionary.Add(pPair.Key, pPair.Value);
+		Dictionary<T, U> newDictionary = new Dictionary<T, U>(dictionary.Count);
 
-		return tNewDictionary;
+		foreach (KeyValuePair<T, U> pair in dictionary)
+		{
+			newDictionary.Add(pair.Key, pair.Value);
+		}
+
+		return newDictionary;
 	}
 }
 
 static public class VariablesExtensions
 {
-	static public float Sqrd(this float fMe)
+	static public float Sqrd(this float value)
 	{
-		return fMe * fMe;
+		return value * value;
 	}
 }
 
 static public class StringExtensions
 {
-	static public T ToEnum<T>(this string sMe, T eDefaultValue) where T : struct, IConvertible
+	static public T ToEnum<T>(this string str, T defaultValue) where T : Enum
 	{
-#if UNITY_EDITOR
-		if (!typeof(T).IsEnum)
-			throw new ArgumentException("T must be an enumerated type");
-#endif
+		if (string.IsNullOrEmpty(str))
+			return defaultValue;
 
-		if (string.IsNullOrEmpty(sMe))
-			return eDefaultValue;
+		Enum[] allValues = (Enum[])(Enum.GetValues(typeof(Enum)));
 
-		foreach (T eValue in Enum.GetValues(typeof(T)))
+		for (int i = 0, n = allValues.Length; i < n; ++i)
 		{
-			if (eValue.ToString().ToLower().Replace("_", "").Equals(sMe.Trim().ToLower()))
-				return eValue;
+			Enum enumValue = allValues[i];
+
+			if (FormatEnumToString(enumValue).Equals(GetLowerCase(str)))
+				return (T)enumValue;
 		}
 
 #if UNITY_EDITOR
-		Debug.LogWarning("Could not find matching enum for \"" + sMe + " in enum \"" + typeof(T).ToString() + "\"!");
+		DebugTools.LogWarning("Could not find matching enum for \"" + str + " in enum \"" + typeof(T).ToString() + "\"!");
 #endif
-		return eDefaultValue;
+		return defaultValue;
 	}
 
-	static public string Replace(this string sMe, int iIndex, char cChar)
+	static private string FormatEnumToString(Enum enumName)
 	{
-		return sMe.Remove(iIndex, 1).Insert(iIndex, cChar.ToString());
+		return enumName.ToString().ToLower().Replace("_", "");
+	}
+
+	static private string GetLowerCase(string str)
+	{
+		return str.Trim().ToLower();
+	}
+
+	static public string Replace(this string str, int index, char character)
+	{
+		return str.Remove(index, 1).Insert(index, character.ToString());
 	}
 }

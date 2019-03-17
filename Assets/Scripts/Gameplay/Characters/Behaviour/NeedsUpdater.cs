@@ -7,19 +7,18 @@ public class NeedsUpdater
 {
 #region Variables (private)
 
-	const float F_NEEDS_DECAY_IN_POINTS_PER_SECOND = 1.0f;
+	const float NEEDS_DECAY_IN_POINTS_PER_SECOND = 1.0f;
 
+	private readonly Dictionary<ENeedType, Need> m_needs = null;
 
-	private Dictionary<ENeedType, Need> m_pNeeds = null;
-
-	private List<ENeedType> m_pLowNeedsSortedLowToHigh = null;
+	private List<ENeedType> m_lowNeedsSortedLowToHigh = null;
 
 	#endregion
 
 
 	public NeedsUpdater()
 	{
-		m_pNeeds = new Dictionary<ENeedType, Need>()
+		m_needs = new Dictionary<ENeedType, Need>()
 		{
 			[ENeedType.BLADDER] = new Need(ENeedType.BLADDER),
 			[ENeedType.FUN] = new Need(ENeedType.FUN),
@@ -29,93 +28,99 @@ public class NeedsUpdater
 			[ENeedType.HYGIENE] = new Need(ENeedType.HYGIENE),
 		};
 
-		m_pLowNeedsSortedLowToHigh = new List<ENeedType>();
+		m_lowNeedsSortedLowToHigh = new List<ENeedType>();
 	}
 
 	public void UpdateNeeds()
 	{
-		foreach (KeyValuePair<ENeedType, Need> tNeed in m_pNeeds)
+		foreach (KeyValuePair<ENeedType, Need> need in m_needs)
 		{
-			ENeedType eNeedType = tNeed.Key;
+			ENeedType needType = need.Key;
 
-			DecayNeed(eNeedType);
+			DecayNeed(needType);
 
-			if (ShouldRegisterNeedAsLow(eNeedType))
-				m_pLowNeedsSortedLowToHigh.Add(eNeedType);
+			if (ShouldRegisterNeedAsLow(needType))
+				m_lowNeedsSortedLowToHigh.Add(needType);
 		}
 	}
 
-	private bool ShouldRegisterNeedAsLow(ENeedType eNeedType)
+	private bool ShouldRegisterNeedAsLow(ENeedType needType)
 	{
-		bool bIsNeedLow = m_pNeeds[eNeedType].State != ENeedState.SATISFIED;
+		bool isNeedLow = m_needs[needType].State != ENeedState.SATISFIED;
 
-		return bIsNeedLow && !m_pLowNeedsSortedLowToHigh.Contains(eNeedType);
+		return isNeedLow && !m_lowNeedsSortedLowToHigh.Contains(needType);
 	}
 
-	private void RegisterLowNeed(ENeedType eNeedType)
+	private void RegisterLowNeed(ENeedType needType)
 	{
-		int iNewNeedPriority = NeedsToolkit.GetNeedPriority(eNeedType);
+		int newNeedPriority = NeedsToolkit.GetNeedPriority(needType);
+		int newIndex = GetNewIndexInListBasedOnPriority(newNeedPriority);
 
-		int iNewIndex = 0;
+		m_lowNeedsSortedLowToHigh.Insert(newIndex, needType);
+	}
 
-		for (; iNewIndex < m_pLowNeedsSortedLowToHigh.Count; ++iNewIndex)
+	private int GetNewIndexInListBasedOnPriority(int priority)
+	{
+		int index = 0;
+
+		for (; index < m_lowNeedsSortedLowToHigh.Count; ++index)
 		{
-			if (IsNeedLowerInPriority(m_pLowNeedsSortedLowToHigh[iNewIndex], iNewNeedPriority))
+			if (IsNeedLowerInPriority(m_lowNeedsSortedLowToHigh[index], priority))
 				break;
 		}
 
-		m_pLowNeedsSortedLowToHigh.Insert(iNewIndex, eNeedType);
+		return index;
 	}
 
-	private bool IsNeedLowerInPriority(ENeedType eNeedType, int iPriorityToCheckAgainst)
+	private bool IsNeedLowerInPriority(ENeedType needType, int priorityToCheckAgainst)
 	{
-		int iCurrentNeedPriority = NeedsToolkit.GetNeedPriority(eNeedType);
+		int currentNeedPriority = NeedsToolkit.GetNeedPriority(needType);
 
-		return iCurrentNeedPriority < iPriorityToCheckAgainst;
+		return currentNeedPriority < priorityToCheckAgainst;
 	}
 
-	private void DecayNeed(ENeedType eNeedType)
+	private void DecayNeed(ENeedType needType)
 	{
-		float fDecayThisFrame = F_NEEDS_DECAY_IN_POINTS_PER_SECOND * Time.deltaTime;
+		float decayThisFrame = NEEDS_DECAY_IN_POINTS_PER_SECOND * Time.deltaTime;
 
-		m_pNeeds[eNeedType].Decay(fDecayThisFrame);
+		m_needs[needType].Decay(decayThisFrame);
 	}
 
-	public NeedStateInfo GetNeedStateInfo(ENeedType eNeedType)
+	public NeedStateInfo GetNeedStateInfo(ENeedType needType)
 	{
-		return m_pNeeds[eNeedType].GetStateInfo();
+		return m_needs[needType].GetStateInfo();
 	}
 
 	public ENeedType GetHighestPriorityNeed()
 	{
-		bool bHasAnyLowNeed = m_pLowNeedsSortedLowToHigh.Count > 0;
+		bool hasAnyLowNeed = m_lowNeedsSortedLowToHigh.Count > 0;
 
-		return bHasAnyLowNeed ? GetHighestPriorityLowNeed() : GetLeastSatisfiedNeed();
+		return hasAnyLowNeed ? GetHighestPriorityLowNeed() : GetLeastSatisfiedNeed();
 	}
 
 	private ENeedType GetHighestPriorityLowNeed()
 	{
-		return m_pLowNeedsSortedLowToHigh[0];
+		return m_lowNeedsSortedLowToHigh[0];
 	}
 
 	private ENeedType GetLeastSatisfiedNeed()
 	{
-		ENeedType eLowestNeedType = ENeedType.NONE;
-		float fLowestSatisfaction = (float)ENeedState.SATISFIED;
+		ENeedType lowestNeedType = ENeedType.NONE;
+		float lowestSatisfaction = (float)ENeedState.SATISFIED;
 
-		foreach (KeyValuePair<ENeedType, Need> tNeed in m_pNeeds)
+		foreach (KeyValuePair<ENeedType, Need> need in m_needs)
 		{
-			ENeedType eCurrentNeedType = tNeed.Key;
+			ENeedType currentNeedType = need.Key;
 
-			float fCurrentNeedSatisfaction = m_pNeeds[eCurrentNeedType].Satisfaction;
+			float currentNeedSatisfaction = m_needs[currentNeedType].Satisfaction;
 
-			if (fCurrentNeedSatisfaction < fLowestSatisfaction)
+			if (currentNeedSatisfaction < lowestSatisfaction)
 			{
-				eLowestNeedType = eCurrentNeedType;
-				fLowestSatisfaction = fCurrentNeedSatisfaction;
+				lowestNeedType = currentNeedType;
+				lowestSatisfaction = currentNeedSatisfaction;
 			}
 		}
 
-		return eLowestNeedType;
+		return lowestNeedType;
 	}
 }

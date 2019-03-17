@@ -7,37 +7,38 @@ public class GameManager : MonoBehaviour
 #region Variables (serialized)
 
 	[SerializeField]
-	private Character m_pTEMP_DefaultCharacter = null;
+	private Character m_TEMP_defaultCharacter = null;
 
 	#endregion
 
 #region Variables (public)
 
-	public float m_fTimeScale = 1.0f;
+	[Range(0.01f, 100.0f)]
+	public float m_timeScale = 1.0f;
 
 	#endregion
 
 #region Variables (private)
 
-	private Character m_pCurrentlyCharacter = null;
+	private Character m_currentCharacter = null;
 
 	#endregion
 
 
 	private void Start()
 	{
-		SeizeControlOfCharacter(m_pTEMP_DefaultCharacter);
+		SeizeControlOfCharacter(m_TEMP_defaultCharacter);
 	}
 
-	private void SeizeControlOfCharacter(Character pCharacter)
+	private void SeizeControlOfCharacter(Character character)
 	{
-		m_pCurrentlyCharacter = pCharacter;
+		m_currentCharacter = character;
 
-		EventsHandler.Dispatch(EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED, pCharacter);
+		EventsHandler.Dispatch(EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED, character);
 	}
 
 	private void FixedUpdate()
 	{
-		Time.timeScale = m_fTimeScale;
+		Time.timeScale = m_timeScale;
 	}
 }
