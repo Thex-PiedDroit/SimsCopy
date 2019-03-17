@@ -81,9 +81,9 @@ public class NeedsUpdater
 		m_pNeeds[eNeedType].Decay(fDecayThisFrame);
 	}
 
-	public Need GetNeed(ENeedType eNeedType)
+	public NeedStateInfo GetNeedStateInfo(ENeedType eNeedType)
 	{
-		return m_pNeeds[eNeedType];
+		return m_pNeeds[eNeedType].GetStateInfo();
 	}
 
 	public ENeedType GetHighestPriorityNeed()

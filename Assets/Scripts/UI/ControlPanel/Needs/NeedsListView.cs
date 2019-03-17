@@ -78,16 +78,16 @@ public class NeedsListView : MonoBehaviour, IEventsListener
 		{
 			NeedDisplayItem pCurrentItem = m_pNeedsDisplayItems[i];
 
-			Need pNeedData = GetNeedFromDisplayItem(pCurrentItem);
-			pCurrentItem.UpdateGauge(pNeedData);
+			NeedStateInfo pNeedStateInfo = GetNeedStateInfoFromDisplayItem(pCurrentItem);
+			pCurrentItem.UpdateGauge(pNeedStateInfo);
 		}
 	}
 
-	private Need GetNeedFromDisplayItem(NeedDisplayItem pItem)
+	private NeedStateInfo GetNeedStateInfoFromDisplayItem(NeedDisplayItem pItem)
 	{
 		ENeedType eAssociatedNeed = pItem.GetAssociatedNeed();
 
-		return m_pCurrentCharacter.GetNeedsUpdater().GetNeed(eAssociatedNeed);
+		return m_pCurrentCharacter.GetNeedsUpdater().GetNeedStateInfo(eAssociatedNeed);
 	}
 
 	public void HandleEvent(Enum eEventType, object pData)

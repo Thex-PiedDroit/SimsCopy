@@ -7,9 +7,11 @@ public class Need
 #region Variables (private)
 
 	private readonly ENeedType m_eNeedType = ENeedType.NONE;
-	public float Satisfaction { get; private set; } = 0.0f;
 
+	public float Satisfaction { get; private set; } = 0.0f;
 	public ENeedState State { get; private set; } = ENeedState.SATISFIED;
+
+	private NeedStateInfo m_tStateInfo = new NeedStateInfo();
 
 	#endregion
 
@@ -18,6 +20,14 @@ public class Need
 	{
 		m_eNeedType = eNeedType;
 		Satisfaction = (float)ENeedState.SATISFIED;
+	}
+
+	public NeedStateInfo GetStateInfo()
+	{
+		m_tStateInfo.m_fSatisfaction = Satisfaction;
+		m_tStateInfo.m_eState = State;
+
+		return m_tStateInfo;
 	}
 
 	public void Decay(float fLoss)
@@ -77,4 +87,10 @@ public class Need
 	{
 		Satisfaction = Mathf.Min(Satisfaction, NeedsToolkit.F_NEEDS_MAX_SATISFACTION);
 	}
+}
+
+public struct NeedStateInfo
+{
+	public float m_fSatisfaction;
+	public ENeedState m_eState;
 }

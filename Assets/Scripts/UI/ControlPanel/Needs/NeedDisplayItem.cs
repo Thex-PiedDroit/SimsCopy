@@ -58,10 +58,10 @@ public class NeedDisplayItem : MonoBehaviour
 		m_pNameLabel.text = m_pNeedTypeDisplayData.m_sDisplayName;
 	}
 
-	public void UpdateGauge(Need pNeed)
+	public void UpdateGauge(NeedStateInfo pNeed)
 	{
-		UpdateGaugeFilling(pNeed.Satisfaction);
-		UpdateGaugeColor(pNeed.State);
+		UpdateGaugeFilling(pNeed.m_fSatisfaction);
+		UpdateGaugeColor(pNeed.m_eState);
 	}
 
 	private void UpdateGaugeFilling(float fSatisfaction)
