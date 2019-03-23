@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47ea4e2e872b2249a7a0d2e99ba472b, type: 3}
   m_Name: DefaultStates
   m_EditorClassIdentifier: 
-  m_pDataSet:
+  m_dataSet:
     reorderableList:
       canAdd: 1
       canRemove: 1

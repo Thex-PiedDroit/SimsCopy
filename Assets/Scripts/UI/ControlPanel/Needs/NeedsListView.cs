@@ -4,24 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class NeedsListView : MonoBehaviour
+public class NeedsListView : MonoBehaviour, IEventsListener
 {
 #region Variables (serialized)
 
 	[SerializeField]
-	private EventObject OnControlledCharacterChanged = null;
+	private Transform m_listContainer = null;
 
 	[SerializeField]
-	private Transform m_pListContainer = null;
-
-	[SerializeField]
-	private List<NeedDisplayItem> m_pNeedsDisplayItems = null;
+	private List<NeedDisplayItem> m_needsDisplayItems = null;
 
 	#endregion
 
 #region Variables (private)
 
-	private Character m_pCurrentCharacter = null;
+	static private readonly Enum[] EVENTS_TO_LISTEN_TO = new Enum[] { EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED };
+
+	private Character m_currentCharacter = null;
 
 	#endregion
 
@@ -30,39 +29,36 @@ public class NeedsListView : MonoBehaviour
 	{
 		InitializeNeedsDisplayItems();
 
-		OnControlledCharacterChanged.OnEventFired += HookToNewCharacterData;
+		EventsHandler.Register(this, EVENTS_TO_LISTEN_TO);
 	}
 
 	private void OnDestroy()
 	{
-		OnControlledCharacterChanged.OnEventFired -= HookToNewCharacterData;
+		EventsHandler.Unregister(this, EVENTS_TO_LISTEN_TO);
 	}
 
 	private void InitializeNeedsDisplayItems()
 	{
-		ENeedType[] pAllNeeds = Toolkit.GetEnumValues<ENeedType>();
+		ENeedType[] allNeeds = Toolkit.GetEnumValues<ENeedType>();
 
-		for (int i = 0; i < pAllNeeds.Length; ++i)
+		for (int i = 0; i < allNeeds.Length; ++i)
 		{
-			if (pAllNeeds[i] == ENeedType.NONE)
+			ENeedType needType = allNeeds[i];
+
+			if (needType == ENeedType.NONE)
 				continue;
 
-			if (m_pNeedsDisplayItems.Count <= i)
+			if (m_needsDisplayItems.Count <= i)
 				CreateNewNeedDisplayItem();
 
-			InitializeNeedDisplayItem(m_pNeedsDisplayItems[i], pAllNeeds[i]);
+			m_needsDisplayItems[i].InitializeWithNeedType(needType);
 		}
 	}
 
 	private void CreateNewNeedDisplayItem()
 	{
-		NeedDisplayItem pNewItem = Instantiate(m_pNeedsDisplayItems[0], m_pListContainer);
-		m_pNeedsDisplayItems.Add(pNewItem);
-	}
-
-	private void InitializeNeedDisplayItem(NeedDisplayItem pItem, ENeedType eNeedType)
-	{
-		pItem.InitializeWithNeedType(eNeedType);
+		NeedDisplayItem newItem = Instantiate(m_needsDisplayItems[0], m_listContainer);
+		m_needsDisplayItems.Add(newItem);
 	}
 
 	private void Update()
@@ -72,35 +68,39 @@ public class NeedsListView : MonoBehaviour
 
 	private void UpdateNeedsDisplay()
 	{
-		if (m_pCurrentCharacter == null)
+		if (m_currentCharacter == null)
 			return;
 
-		for (int i = 0; i < m_pNeedsDisplayItems.Count; ++i)
+		for (int i = 0; i < m_needsDisplayItems.Count; ++i)
 		{
-			NeedDisplayItem pCurrentItem = m_pNeedsDisplayItems[i];
+			NeedDisplayItem currentItem = m_needsDisplayItems[i];
 
-			Need pNeedData = GetNeedFromDisplayItem(pCurrentItem);
-			pCurrentItem.UpdateGauge(pNeedData);
+			NeedStateInfo needStateInfo = GetNeedStateInfoFromDisplayItem(currentItem);
+			currentItem.UpdateGauge(needStateInfo);
 		}
 	}
 
-	private Need GetNeedFromDisplayItem(NeedDisplayItem pItem)
+	private NeedStateInfo GetNeedStateInfoFromDisplayItem(NeedDisplayItem item)
 	{
-		ENeedType eAssociatedNeed = pItem.GetAssociatedNeed();
+		ENeedType associatedNeed = item.GetAssociatedNeed();
 
-		return m_pCurrentCharacter.GetNeedsUpdater().GetNeed(eAssociatedNeed);
+		return m_currentCharacter.GetNeedsUpdater().GetNeedStateInfo(associatedNeed);
 	}
 
-	private void HookToNewCharacterData(EventData pEventData)
+	public void HandleEvent(Enum eventType, object data)
 	{
-		try
+		if (!(eventType is EGenericGameEvents))
+			return;
+
+		EGenericGameEvents gameEvent = (EGenericGameEvents)eventType;
+
+		switch (gameEvent)
 		{
-			CharacterIdentityEventData pCharacterData = pEventData as CharacterIdentityEventData;
-			m_pCurrentCharacter = pCharacterData.Subject;
-		}
-		catch (NullReferenceException)
-		{
-			DebugTools.LogError("A character changed event has been fired without proper data!");
+			case EGenericGameEvents.CONTROLLED_CHARACTER_CHANGED:
+				{
+					m_currentCharacter = data as Character;
+					break;
+				}
 		}
 	}
 }

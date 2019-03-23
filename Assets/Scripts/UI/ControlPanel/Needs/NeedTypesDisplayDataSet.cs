@@ -11,19 +11,19 @@ public class NeedTypesDisplayDataSet : ScriptableObject
 	public class DataSetDictionary : SerializableDictionaryBase<ENeedType, NeedTypesDisplayData> { }
 
 	[SerializeField]
-	private DataSetDictionary m_pDataSet = null;
+	private DataSetDictionary m_dataSet = null;
 
 
-	public NeedTypesDisplayData GetDataForNeed(ENeedType eNeedType)
+	public NeedTypesDisplayData GetDataForNeed(ENeedType needType)
 	{
-		return m_pDataSet[eNeedType];
+		return m_dataSet[needType];
 	}
 }
 
 [Serializable]
 public struct NeedTypesDisplayData
 {
-	public string m_sDisplayName;
-	public Sprite m_pSprite;
-	public NeedStateDisplayDataSet m_pStateDisplayData;
+	public string m_displayName;
+	public Sprite m_sprite;
+	public NeedStateDisplayDataSet m_stateDisplayData;
 }

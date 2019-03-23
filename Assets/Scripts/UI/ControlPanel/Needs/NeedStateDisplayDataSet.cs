@@ -10,11 +10,11 @@ public class NeedStateDisplayDataSet : ScriptableObject
 	public class DataSetDictionary : SerializableDictionaryBase<ENeedState, Color> { }
 
 	[SerializeField]
-	private DataSetDictionary m_pDataSet = null;
+	private DataSetDictionary m_dataSet = null;
 
 
-	public Color GetColorForState(ENeedState eNeedState)
+	public Color GetColorForState(ENeedState needState)
 	{
-		return m_pDataSet[eNeedState];
+		return m_dataSet[needState];
 	}
 }

@@ -700,10 +700,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba5f912c1518fb4fa314a044e42ee41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnControlledCharacterChanged: {fileID: 11400000, guid: 47b357e4c7f0f284ea50a32149f30525,
-    type: 2}
-  m_pTEMP_DefaultCharacter: {fileID: 333366414}
-  m_fTimeScale: 1
+  m_TEMP_defaultCharacter: {fileID: 333366414}
+  m_timeScale: 1
 --- !u!1 &1661004076
 GameObject:
   m_ObjectHideFlags: 0

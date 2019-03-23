@@ -9,9 +9,9 @@ public class EventObject : ScriptableObject
 	public Action<EventData /*pData*/> OnEventFired = null;
 
 
-	public void FireEvent(EventData pData)
+	public void FireEvent(EventData data)
 	{
-		OnEventFired?.Invoke(pData);
+		OnEventFired?.Invoke(data);
 	}
 }
 

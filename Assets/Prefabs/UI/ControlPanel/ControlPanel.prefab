@@ -50,10 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dff1e4cfdc5fb484fb4430b02a8f6ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnControlledCharacterChanged: {fileID: 11400000, guid: 47b357e4c7f0f284ea50a32149f30525,
-    type: 2}
-  m_pListContainer: {fileID: 1409160448785336686}
-  m_pNeedsDisplayItems:
+  m_listContainer: {fileID: 1409160448785336686}
+  m_needsDisplayItems:
   - {fileID: 4171798765819483631}
 --- !u!114 &1409160448785336685
 MonoBehaviour:

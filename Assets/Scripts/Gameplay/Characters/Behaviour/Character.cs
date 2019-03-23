@@ -5,31 +5,31 @@ public class Character : MonoBehaviour
 {
 #region Variables (private)
 
-	private NeedsUpdater m_pNeedsUpdater = null;
+	private NeedsUpdater m_needsUpdater = null;
 
 	#endregion
 
 
 	private void Start()
 	{
-		m_pNeedsUpdater = new NeedsUpdater();
+		m_needsUpdater = new NeedsUpdater();
 	}
 
 	private void Update()
 	{
-		m_pNeedsUpdater.UpdateNeeds();
+		m_needsUpdater.UpdateNeeds();
 		CheckForNeedsReaction();
 	}
 
 	private void CheckForNeedsReaction()
 	{
-		ENeedType eNeedType = m_pNeedsUpdater.GetHighestPriorityNeed();
+		ENeedType needType = m_needsUpdater.GetHighestPriorityNeed();
 
-		Debug.Log(string.Format("Highest priority need = {0}", eNeedType));
+		DebugTools.Log("[Character] - Highest priority need = {0}", needType);
 	}
 
 	public NeedsUpdater GetNeedsUpdater()
 	{
-		return m_pNeedsUpdater;
+		return m_needsUpdater;
 	}
 }
